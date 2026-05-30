@@ -15,6 +15,22 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Rasplator API", version="0.1.0", lifespan=lifespan)
 
 
+@app.get("/health")
+def health() -> dict:
+	return {
+		"status": "ok",
+		"started": bool(getattr(app.state, "started", False)),
+	}
+
+
+@app.get("/version")
+def version() -> dict:
+	return {
+		"service": app.title,
+		"api_version": app.version,
+	}
+
+
 if __name__ == "__main__":
 	import uvicorn
 
